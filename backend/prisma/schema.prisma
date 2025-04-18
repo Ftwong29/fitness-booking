@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  phoneNumber   String
+  passwordHash  String?
+  role          String   @default("user") // ✅ 支持角色系统
+  bookings      Booking[]
+}
+
+model Machine {
+  id          Int      @id @default(autoincrement())
+  machineType String
+  location    String
+  latitude    Float
+  longitude   Float
+  description String
+  bookings    Booking[]
+}
+
+model Instructor {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  phoneNumber String
+  ratePerHour Int
+  bookings    Booking[]
+}
+
+model Booking {
+  id            Int        @id @default(autoincrement())
+  userId        Int
+  machineId     Int
+  instructorId  Int
+  startTime     DateTime
+  endTime       DateTime
+  createdAt     DateTime   @default(now())
+  status        String     @default("confirmed")
+
+  user        User        @relation(fields: [userId], references: [id])
+  machine     Machine     @relation(fields: [machineId], references: [id])
+  instructor  Instructor  @relation(fields: [instructorId], references: [id])
+
+  @@index([machineId, startTime, endTime])
+  @@index([instructorId, startTime, endTime])
+}
