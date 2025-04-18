@@ -119,6 +119,13 @@ Test cases include:
 - Cooldown enforcement
 
 ---
+### ⚙️ Environment Variables
+
+This project requires the following environment variables.  
+Please copy `.env.example` to `.env` and fill in the required values.
+
+```bash
+## cp .env.example .env
 
 ## 📌 Author Notes
 
